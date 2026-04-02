@@ -21,12 +21,14 @@ import json
 import os
 from datetime import datetime
 from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
 
 import db
 import score
 import ingest
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
+CORS(app)  # Allow GitHub Pages frontend to call this API
 
 # ─── HEALTH ──────────────────────────────────────────────────────────────────
 
@@ -248,7 +250,7 @@ if __name__ == "__main__":
     else:
         print(f"\n[startup] Database ready. {kev_count} KEV entries loaded.")
 
-    print("\n[startup] Starting Flask API on http://localhost:5000")
+    port = int(os.environ.get("PORT", 5000))
+    print(f"\n[startup] Starting Flask API on port {port}")
     print("[startup] Press CTRL+C to stop.\n")
-
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=False, host="0.0.0.0", port=port)
